@@ -1,0 +1,258 @@
+:root {
+  --map-label-size: 11px;
+  --map-number-size: 13px;
+}
+
+.map-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #e8ecef;
+  position: relative;
+  overflow: hidden;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  background-color: transparent !important;
+}
+
+/* Custom styling for zoom controls */
+::ng-deep .leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  margin-top: 20px !important;
+  margin-right: 20px !important;
+
+  a {
+    background-color: white !important;
+    color: #1a3c34 !important;
+    font-weight: bold !important;
+    border: 1px solid #eee !important;
+    &:first-child {
+      border-radius: 8px 8px 0 0 !important;
+    }
+    &:last-child {
+      border-radius: 0 0 8px 8px !important;
+    }
+    &:hover {
+      background-color: #f8f9fa !important;
+    }
+  }
+}
+
+::ng-deep .state-label {
+  background: transparent;
+  border: none;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  .label-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1a3c34;
+    text-shadow: 
+      -1px -1px 0 #fff,  
+       1px -1px 0 #fff,
+      -1px  1px 0 #fff,
+       1px  1px 0 #fff;
+    line-height: 1.1;
+    pointer-events: none;
+    
+    .state-nm {
+      font-size: var(--map-label-size);
+      font-weight: bold;
+      display: block;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .seat-num {
+      font-size: var(--map-number-size);
+      font-weight: 900;
+      color: #000;
+      display: block;
+      text-align: center;
+    }
+  }
+}
+
+/* Welcome Overlay Styles */
+.welcome-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 380px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+
+  &.collapsed {
+    width: auto;
+    max-width: 380px;
+    .welcome-header {
+      padding-bottom: 20px;
+    }
+  }
+
+  .welcome-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 20px 0;
+    gap: 15px;
+
+    .welcome-title {
+      flex: 1;
+
+      h1 {
+        margin: 0 0 5px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1a3c34;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #555;
+        font-weight: 500;
+      }
+    }
+
+    .toggle-btn {
+      background: rgba(26, 60, 52, 0.08);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #1a3c34;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(26, 60, 52, 0.15);
+        transform: scale(1.05);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+
+      svg {
+        stroke-width: 2.5;
+      }
+    }
+  }
+
+  .help-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeIn 0.4s ease-out;
+
+    .instruction-item {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .icon-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+
+        &.hover-icon {
+          background: #e8f5e9;
+          color: #2e7d32;
+        }
+
+        &.chat-icon {
+          background: #e3f2fd;
+          color: #1565c0;
+        }
+
+        &.zoom-icon {
+          background: #fff3e0;
+          color: #ef6c00;
+        }
+      }
+
+      .text {
+        h3 {
+          margin: 0 0 4px;
+          font-size: 0.95rem;
+          color: #333;
+          font-weight: 600;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.8rem;
+          color: #666;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-overlay {
+    top: 15px;
+    bottom: auto;
+    left: 10px;
+    right: 65px;
+    width: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    
+    &.collapsed {
+      max-width: none;
+      right: auto;
+    }
+  }
+}
