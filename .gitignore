@@ -42,3 +42,8 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase & Environment Secrets - NEVER commit these
+src/app/firebase.config.ts
+src/environments/environment.ts
+src/environments/environment.prod.ts

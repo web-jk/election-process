@@ -198,15 +198,16 @@ export class MapComponent implements AfterViewInit, OnInit {
       if (addedLabels.has(labelKey) && (labelKey.includes('Dadra') || labelKey.includes('Daman'))) return;
       addedLabels.add(labelKey);
 
-      // Accessibility: White text with halos for maximum visibility
+      // Label marker
+      const isOceanLabel = ['andaman', 'lakshadweep'].some(k => this.normalize(stateName).includes(k));
       new google.maps.Marker({
         position: center,
         map: this.map,
         label: {
           text: `${sData.seats !== undefined ? sData.seats + ' ' : ''}${sData.displayName}`,
-          color: '#ffffff',
+          color: '#1a3c34',
           fontSize: '10px',
-          fontWeight: '800',
+          fontWeight: '700',
           className: 'map-label-text'
         },
         icon: {
@@ -214,7 +215,7 @@ export class MapComponent implements AfterViewInit, OnInit {
           scale: 0
         },
         interactive: false,
-        zIndex: 1000,
+        zIndex: isOceanLabel ? 9999 : 1000,
         title: stateName
       } as any);
     });
@@ -232,67 +233,70 @@ export class MapComponent implements AfterViewInit, OnInit {
     
     // Use the clean name from our data if available, otherwise fallback to GeoJSON name
     const cleanName = sData ? (('state' in sData) ? sData.state : sData.name) : stateName;
-    return { displayName: cleanName, seats: sData?.lok_sabha_seats };
+    
+    // Shorten very long names for map labels to avoid overlap
+    const shortNames: { [key: string]: string } = {
+      'Andaman and Nicobar Islands': 'Andaman & Nicobar',
+      'Dadra and Nagar Haveli and Daman and Diu': 'Dadra & Daman',
+      'Jammu and Kashmir': 'J & K',
+      'Himachal Pradesh': 'H.P.',
+      'Arunachal Pradesh': 'Arunachal',
+    };
+    const displayName = shortNames[cleanName] ?? cleanName;
+    return { displayName, seats: sData?.lok_sabha_seats };
   }
 
   private getStateCenter(stateName: string): google.maps.LatLngLiteral {
-    const normalized = this.normalize(stateName);
-    
-    const centers: { [key: string]: google.maps.LatLngLiteral } = {
-      'rajasthan': { lat: 26.5, lng: 73.8 },
-      'madhyapradesh': { lat: 23.5, lng: 78.2 },
-      'maharashtra': { lat: 19.5, lng: 76.0 },
-      'uttarpradesh': { lat: 27.2, lng: 80.8 }, 
-      'gujarat': { lat: 22.2, lng: 71.5 },
-      'karnataka': { lat: 14.8, lng: 76.0 }, 
-      'andhrapradesh': { lat: 15.8, lng: 79.8 }, 
-      'odisha': { lat: 20.5, lng: 84.5 },
-      'chhattisgarh': { lat: 21.2, lng: 81.8 },
-      'tamilnadu': { lat: 10.8, lng: 78.5 },
-      'telangana': { lat: 17.8, lng: 79.0 },
-      'bihar': { lat: 25.8, lng: 85.5 }, 
-      'westbengal': { lat: 24.2, lng: 87.8 }, 
-      'arunanchalpradesh': { lat: 28.0, lng: 94.5 },
-      'arunachalpradesh': { lat: 28.0, lng: 94.5 },
-      'jharkhand': { lat: 23.6, lng: 85.2 }, 
-      'assam': { lat: 26.2, lng: 92.5 }, 
-      'himachalpradesh': { lat: 31.8, lng: 77.2 }, 
-      'jammuandkashmir': { lat: 34.0, lng: 74.5 },
-      'jammukashmir': { lat: 34.0, lng: 74.5 },
-      'uttarakhand': { lat: 30.2, lng: 79.2 },
-      'punjab': { lat: 31.0, lng: 75.5 }, 
-      'haryana': { lat: 29.2, lng: 76.2 }, 
-      'kerala': { lat: 10.5, lng: 76.5 }, 
-      'meghalaya': { lat: 25.5, lng: 91.2 }, 
-      'manipur': { lat: 24.7, lng: 93.9 }, 
-      'mizoram': { lat: 23.2, lng: 92.9 }, 
-      'nagaland': { lat: 26.1, lng: 94.5 }, 
-      'tripura': { lat: 23.8, lng: 91.8 }, 
-      'sikkim': { lat: 27.5, lng: 88.5 },
-      'goa': { lat: 15.3, lng: 74.0 }, 
-      'delhi': { lat: 28.6, lng: 77.2 }, 
-      'nctofdelhi': { lat: 28.6, lng: 77.2 },
-      'ladakh': { lat: 34.2, lng: 77.5 },
-      'lakshadweep': { lat: 10.5, lng: 72.5 },
-      'andamannicobar': { lat: 11.7, lng: 92.7 },
-      'puducherry': { lat: 11.9, lng: 79.8 },
-      'chandigarh': { lat: 30.7, lng: 76.8 },
-      'dadaranagarhavelli': { lat: 20.2, lng: 73.0 },
-      'damandiu': { lat: 20.4, lng: 72.8 }
+    // Direct lookup using exact GeoJSON state names (no fuzzy matching to prevent mis-assignment)
+    const exactCenters: { [key: string]: google.maps.LatLngLiteral } = {
+      'Telangana': { lat: 17.8, lng: 79.0 },
+      'Andaman & Nicobar Island': { lat: 13.1, lng: 93.1 },
+      'Andhra Pradesh': { lat: 15.8, lng: 79.8 },
+      'Arunanchal Pradesh': { lat: 28.0, lng: 94.5 },
+      'Arunachal Pradesh': { lat: 28.0, lng: 94.5 },
+      'Assam': { lat: 26.2, lng: 92.5 },
+      'Bihar': { lat: 25.8, lng: 85.5 },
+      'Chhattisgarh': { lat: 21.2, lng: 81.8 },
+      'Daman & Diu': { lat: 20.4, lng: 72.8 },
+      'Goa': { lat: 15.3, lng: 74.0 },
+      'Gujarat': { lat: 22.2, lng: 71.5 },
+      'Haryana': { lat: 29.2, lng: 76.2 },
+      'Himachal Pradesh': { lat: 31.8, lng: 77.2 },
+      'Jammu & Kashmir': { lat: 34.0, lng: 74.5 },
+      'Jharkhand': { lat: 23.6, lng: 85.2 },
+      'Karnataka': { lat: 14.8, lng: 76.0 },
+      'Kerala': { lat: 10.5, lng: 76.5 },
+      'Lakshadweep': { lat: 10.5, lng: 72.5 },
+      'Madhya Pradesh': { lat: 23.5, lng: 78.2 },
+      'Maharashtra': { lat: 19.5, lng: 76.0 },
+      'Manipur': { lat: 24.7, lng: 93.9 },
+      'Chandigarh': { lat: 30.7, lng: 76.8 },
+      'Puducherry': { lat: 11.9, lng: 79.8 },
+      'Punjab': { lat: 31.0, lng: 75.5 },
+      'Rajasthan': { lat: 26.5, lng: 73.8 },
+      'Sikkim': { lat: 27.5, lng: 88.5 },
+      'Tamil Nadu': { lat: 10.8, lng: 78.5 },
+      'Tripura': { lat: 23.8, lng: 91.8 },
+      'Uttar Pradesh': { lat: 27.2, lng: 80.8 },
+      'Uttarakhand': { lat: 30.2, lng: 79.2 },
+      'West Bengal': { lat: 24.2, lng: 87.8 },
+      'Odisha': { lat: 20.5, lng: 84.5 },
+      'Dadara & Nagar Havelli': { lat: 20.2, lng: 73.0 },
+      'Meghalaya': { lat: 25.5, lng: 91.2 },
+      'Mizoram': { lat: 23.2, lng: 92.9 },
+      'Nagaland': { lat: 26.1, lng: 94.5 },
+      'NCT of Delhi': { lat: 28.6, lng: 77.2 },
+      'Ladakh': { lat: 34.2, lng: 77.5 },
     };
 
-    // Try to match normalized names
-    for (const key in centers) {
-      if (normalized === key || normalized.includes(key) || key.includes(normalized)) {
-        return centers[key];
-      }
-    }
+    // Exact match first (most reliable)
+    if (exactCenters[stateName]) return exactCenters[stateName];
 
-    // Secondary fallback for common variations
-    if (normalized.includes('dadra') || normalized.includes('haveli')) return centers['dadaranagarhavelli'];
-    if (normalized.includes('daman') || normalized.includes('diu')) return centers['damandiu'];
-    if (normalized.includes('andaman')) return centers['andamannicobar'];
-    if (normalized.includes('delhi')) return centers['nctofdelhi'];
+    // Fallback: normalized match
+    const normalized = this.normalize(stateName);
+    for (const key in exactCenters) {
+      if (this.normalize(key) === normalized) return exactCenters[key];
+    }
 
     return { lat: 22.5937, lng: 78.9629 };
   }
