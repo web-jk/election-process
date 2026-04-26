@@ -1,4 +1,7 @@
 <router-outlet></router-outlet>
 @if (!isLoginPage()) {
-  <app-chatbot></app-chatbot>
+  @defer (on timer(1s)) {
+    <app-chatbot></app-chatbot>
+  }
 }
+
