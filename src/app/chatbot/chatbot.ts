@@ -123,7 +123,8 @@ export class ChatbotComponent {
       'Election Security': '🛡️',
       'Special Provisions': '♿',
       'After Elections': '🏆',
-      'Digital Initiatives': '📱'
+      'Digital Initiatives': '📱',
+      'Census & Delimitation': '📏'
     };
     return icons[category] || '📌';
   }

@@ -196,6 +196,37 @@ export const ELECTION_QA: ChatQA[] = [
     category: 'Voter Eligibility',
     question: 'What is the Electoral Roll and how is it updated?',
     answer: 'The Electoral Roll (Voter List) is the official list of all eligible voters in a constituency. It is updated through:\n\n• **Annual Revision** – ECI conducts a summary revision every year with **1st January** as the qualifying date.\n• **Continuous Updates** – New registrations, deletions (deceased/shifted voters), and corrections can be done throughout the year.\n• **Special Revision** – Done before major elections with intensive door-to-door verification by BLOs (Booth Level Officers).\n\nYou can check your name at **voters.eci.gov.in** or through the **Voter Helpline App** using your EPIC number.'
+  },
+  // --- Census & Delimitation ---
+  {
+    id: 31,
+    category: 'Census & Delimitation',
+    question: 'What is the Census and how does it relate to elections?',
+    answer: 'The Census is a decennial process of collecting demographic data of the entire population. It forms the basis for **Delimitation**, which is the process of redrawing boundaries of Lok Sabha and State Assembly constituencies to ensure that each seat represents roughly the same number of people.'
+  },
+  {
+    id: 32,
+    category: 'Census & Delimitation',
+    question: 'When was the last Census conducted and when is the next one?',
+    answer: 'The last Census in India was conducted in **2011**. The 2021 Census was delayed due to the COVID-19 pandemic. The upcoming Census is expected to be conducted in the near future (likely **2025-26**), and it will be India\'s first **Digital Census**.'
+  },
+  {
+    id: 33,
+    category: 'Census & Delimitation',
+    question: 'What is Delimitation and why is it done?',
+    answer: 'Delimitation is the act of redrawing boundaries of Lok Sabha and State Assembly seats to represent changes in population. It is done to ensure **"One Vote, One Value"**—meaning each elected representative should represent a similar number of voters. The process is carried out by an independent **Delimitation Commission**.'
+  },
+  {
+    id: 34,
+    category: 'Census & Delimitation',
+    question: 'What is the Delimitation Commission and how does it work?',
+    answer: 'The Delimitation Commission is a high-power body appointed by the President of India. It consists of a retired Supreme Court judge, the Chief Election Commissioner, and State Election Commissioners. Its orders have the force of law and cannot be challenged in any court. The next major nationwide delimitation is scheduled to happen after the first Census taken after **2026**.'
+  },
+  {
+    id: 35,
+    category: 'Census & Delimitation',
+    question: 'What is SIR (Special Intensive Revision) in the election process?',
+    answer: '**SIR (Special Intensive Revision)** is a rigorous, large-scale exercise conducted by the ECI to "purify" the electoral rolls. Unlike the annual **Summary Revision (SSR)**, SIR involves **house-to-house enumeration** where Booth Level Officers (BLOs) visit every home to verify voters, remove deceased or shifted entries, and register new eligible citizens to ensure an error-free voter list.'
   }
 ];
 
@@ -210,5 +241,6 @@ export const CHAT_CATEGORIES = [
   'Election Security',
   'Special Provisions',
   'After Elections',
-  'Digital Initiatives'
+  'Digital Initiatives',
+  'Census & Delimitation'
 ];
