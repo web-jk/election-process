@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyCPO3K5dpSVyt-IIzi73GuXKCxqxParBoA",
+  apiKey: "AIzaSyBE7dleUNXrlQOLiWzRlMV1pPfX7aDskVI",
   authDomain: "election-process-4a0cd.firebaseapp.com",
   projectId: "election-process-4a0cd",
   storageBucket: "election-process-4a0cd.firebasestorage.app",

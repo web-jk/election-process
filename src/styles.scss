@@ -4,6 +4,7 @@
 :root {
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --heading-font: 'Outfit', sans-serif;
+  --map-label-size: 11px;
 }
 
 * {
@@ -20,4 +21,38 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--heading-font);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+/* User Requested Map Label Styles */
+.map-label-text {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: var(--map-label-size) !important;
+  font-weight: 700 !important;
+  color: #1a3c34 !important;
+  text-shadow: 
+    -1px -1px 0 #fff, 
+     1px -1px 0 #fff, 
+    -1px  1px 0 #fff, 
+     1px  1px 0 #fff,
+     0px 0px 3px rgba(255,255,255,0.8) !important;
+  white-space: nowrap !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.1 !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Fix for Google Maps UI Font */
+.gm-style div, 
+.gm-style span,
+.gm-style a,
+.gm-style button {
+  font-family: 'Outfit', sans-serif !important;
 }

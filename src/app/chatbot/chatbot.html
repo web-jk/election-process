@@ -74,6 +74,18 @@
       </div>
     }
 
+    <!-- Typing Indicator -->
+    @if (isTyping()) {
+      <div class="message bot">
+        <div class="msg-avatar">🤖</div>
+        <div class="msg-bubble typing">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    }
+
     <!-- Category Grid -->
     @if (showCategories() && !searchQuery()) {
       <div class="categories-section">
@@ -124,6 +136,23 @@
 
   <!-- Footer -->
   <div class="chat-footer">
-    <span class="footer-text">🇮🇳 Powered by Election Commission Data</span>
+    <div class="input-container">
+      <input 
+        type="text" 
+        placeholder="Ask anything about elections..." 
+        [value]="userInput()" 
+        (input)="userInput.set($any($event.target).value)"
+        (keyup.enter)="sendCustomMessage()"
+        [disabled]="isTyping()"
+      />
+      <button class="send-btn" (click)="sendCustomMessage()" [disabled]="!userInput().trim() || isTyping()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+    <span class="footer-text">🇮🇳 Powered by Google Gemini AI</span>
   </div>
 </div>

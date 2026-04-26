@@ -1,57 +1,61 @@
-<div class="map-container">
-  
-  <!-- Overlay Card -->
-  <div class="welcome-overlay" [class.collapsed]="!showHelp()">
-    <div class="welcome-header">
-      <div class="welcome-title">
-        <h1>Welcome, {{ userName() }}! 👋</h1>
-        <p>Explore the Indian Election Process</p>
-      </div>
-      <button class="toggle-btn" (click)="toggleHelp()" [attr.aria-label]="showHelp() ? 'Hide Instructions' : 'Show Instructions'">
-        @if(showHelp()) {
+<div class="map-wrapper">
+  <!-- Google Map Container -->
+  <div id="map" #mapContainer></div>
+
+  <!-- Overlay UI -->
+  <div class="map-overlay">
+    <!-- Welcome Header -->
+    <div class="welcome-card" [class.hidden]="!showHelp()">
+      <div class="welcome-header">
+        <div class="user-profile">
+          <div class="avatar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <div class="user-info">
+            <span class="greeting">Namaste,</span>
+            <span class="name">{{ userName() }}</span>
+          </div>
+        </div>
+        <button class="icon-btn help-toggle" (click)="toggleHelp()" title="Hide Help">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        } @else {
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        }
-      </button>
+        </button>
+      </div>
+
+      <div class="welcome-body">
+        <h2>Interactive Election Map</h2>
+        <p>Explore seat distributions and voter data across India. Click on any state to view detailed assembly and parliamentary figures.</p>
+        
+        <div class="quick-guide">
+          <div class="guide-item">
+            <span class="dot primary"></span>
+            <span class="label">Click states for data</span>
+          </div>
+          <div class="guide-item">
+            <span class="dot info"></span>
+            <span class="label">Hover for details</span>
+          </div>
+          <div class="guide-item">
+            <span class="dot success"></span>
+            <span class="label">Real-time updates</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    @if(showHelp()) {
-      <div class="help-content">
-        <div class="instruction-item">
-          <div class="icon-box hover-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"/><path d="M7 3.34V5a3 3 0 0 0 3 3v0a2 2 0 0 1 2 2v0c0 1.1.9 2 2 2v0a2 2 0 0 0 2-2v0c0-1.1.9-2 2-2h1.66"/><path d="M11 20.92A10 10 0 1 0 3 13.08"/></svg>
-          </div>
-          <div class="text">
-            <h3>Explore the Map</h3>
-            <p>Hover over any state to view details like Lok Sabha, Rajya Sabha & Vidhan Sabha seats.</p>
-          </div>
-        </div>
-        
-        <div class="instruction-item">
-          <div class="icon-box chat-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          </div>
-          <div class="text">
-            <h3>Ask the Assistant</h3>
-            <p>Click the chatbot in the bottom right to learn about election timelines and steps.</p>
-          </div>
-        </div>
-
-        <div class="instruction-item">
-          <div class="icon-box zoom-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-          </div>
-          <div class="text">
-            <h3>Zoom & Pan</h3>
-            <p>Use the controls on the top right or scroll to zoom in and out of the map.</p>
-          </div>
-        </div>
-      </div>
-    }
+    <!-- Mini Toggle (When Help is hidden) -->
+    <button class="mini-help-btn" [class.show]="!showHelp()" (click)="toggleHelp()" aria-label="Show help guide">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      <span>Show Guide</span>
+    </button>
   </div>
 
-  <div id="map"></div>
+  <!-- Legend / Stats -->
+  <div class="map-legend">
+    <div class="legend-item">
+      <span class="legend-color"></span>
+      <span class="legend-text">Election Process 2024</span>
+    </div>
+  </div>
 
   <!-- Disclaimer -->
   <div class="disclaimer">

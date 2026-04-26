@@ -1,6 +1,8 @@
 import { Component, signal, computed, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ELECTION_QA, CHAT_CATEGORIES, ChatQA } from './chatbot-data';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { firebaseConfig } from '../firebase.config';
 
 interface ChatMessage {
   type: 'bot' | 'user';
@@ -24,6 +26,11 @@ export class ChatbotComponent {
   showCategories = signal(true);
   searchQuery = signal('');
   hasNewMessage = signal(false);
+  isTyping = signal(false);
+  userInput = signal('');
+
+  private genAI = new GoogleGenerativeAI(firebaseConfig.apiKey);
+  private model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   categories = CHAT_CATEGORIES;
   allQuestions = ELECTION_QA;
@@ -76,9 +83,37 @@ export class ChatbotComponent {
 
   askQuestion(qa: ChatQA): void {
     this.addUserMessage(qa.question);
+    this.isTyping.set(true);
     setTimeout(() => {
+      this.isTyping.set(false);
       this.addBotMessage(qa.answer, 'keep-user-top');
-    }, 400);
+    }, 800);
+  }
+
+  async sendCustomMessage(): Promise<void> {
+    const text = this.userInput().trim();
+    if (!text || this.isTyping()) return;
+
+    this.addUserMessage(text);
+    this.userInput.set('');
+    this.isTyping.set(true);
+
+    try {
+      const prompt = `You are an Indian Election Assistant. Answer the following question about the Indian election process accurately and concisely based on official ECI (Election Commission of India) rules. If the question is not about elections, politely redirect the user.
+      
+      Question: ${text}`;
+
+      const result = await this.model.generateContent(prompt);
+      const response = await result.response;
+      const aiResponse = response.text();
+      
+      this.isTyping.set(false);
+      this.addBotMessage(aiResponse);
+    } catch (error) {
+      console.error('Gemini Error:', error);
+      this.isTyping.set(false);
+      this.addBotMessage("⚠️ I'm having trouble connecting to my brain right now. Please try again or pick a question from the list!");
+    }
   }
 
   onSearch(event: Event): void {
