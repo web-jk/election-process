@@ -31,7 +31,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   box-shadow: 0 8px 32px rgba(255, 107, 0, 0.4), 0 2px 8px $shadow;
   transition: all $transition;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-family);
   font-weight: 600;
   font-size: 15px;
   animation: fabPulse 2s ease-in-out infinite;
@@ -144,7 +144,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       margin: 0;
       font-size: 16px;
       font-weight: 700;
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: var(--heading-font);
     }
     .status-dot {
       display: inline-block;
@@ -216,7 +216,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
     font-size: 14px;
     color: $text;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: var(--font-family);
 
     &::placeholder {
       color: #9CA3AF;
@@ -336,7 +336,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
   color: $text-muted;
   margin: 8px 0 12px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-family);
 }
 
 .category-grid {
@@ -356,7 +356,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: $radius-sm;
   cursor: pointer;
   transition: all $transition;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-family);
 
   &:hover {
     border-color: $primary;
@@ -405,7 +405,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   margin-bottom: 12px;
   transition: all $transition;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-family);
 
   &:hover {
     background: #E5E7EB;
@@ -429,7 +429,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   text-align: left;
   transition: all $transition;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-family);
 
   &:hover {
     border-color: $primary;
@@ -481,7 +481,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   .footer-text {
     font-size: 11px;
     color: $text-muted;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: var(--font-family);
   }
 }
 

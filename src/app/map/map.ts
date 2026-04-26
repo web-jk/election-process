@@ -41,7 +41,7 @@ export class MapComponent implements AfterViewInit, OnInit {
       doubleClickZoom: true,
       dragging: true,
       touchZoom: true,
-      bounceAtZoomLimits: true
+      bounceAtZoomLimits: false
     });
 
     // Add zoom controls to the bottom right
@@ -63,7 +63,7 @@ export class MapComponent implements AfterViewInit, OnInit {
               const sData = electionData.states.find(s => s.state === stateName) || 
                             electionData.union_territories.find(ut => ut.name === stateName);
               
-              let popupContent = `<div style="font-family: sans-serif; padding: 5px;">
+              let popupContent = `<div style="padding: 5px;">
                 <h3 style="margin: 0 0 10px 0; color: #1a73e8;">${stateName}</h3>`;
               
               if (feature.properties.district) {
@@ -74,6 +74,7 @@ export class MapComponent implements AfterViewInit, OnInit {
                 popupContent += `
                   <p style="margin: 5px 0;"><strong>Lok Sabha Seats:</strong> ${sData.lok_sabha_seats}</p>
                   <p style="margin: 5px 0;"><strong>Rajya Sabha Seats:</strong> ${sData.rajya_sabha_seats}</p>
+                  <p style="margin: 5px 0;"><strong>Vidhan Sabha Seats:</strong> ${sData.vidhan_sabha_seats}</p>
                 `;
               }
               
@@ -96,7 +97,8 @@ export class MapComponent implements AfterViewInit, OnInit {
           this.addLabels(data);
           const bounds = geojsonLayer.getBounds();
           this.map.fitBounds(bounds, { padding: [20, 20] });
-          this.map.setMaxBounds(bounds.pad(0.5));
+          // Removed setMaxBounds to prevent snapping behavior when dragging
+          // this.map.setMaxBounds(bounds.pad(0.5));
           
           // Initial scale
           this.updateLabelScale();
