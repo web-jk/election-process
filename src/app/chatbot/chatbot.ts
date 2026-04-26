@@ -1,8 +1,7 @@
 import { Component, signal, computed, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ELECTION_QA, CHAT_CATEGORIES, ChatQA } from './chatbot-data';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { firebaseConfig } from '../firebase.config';
+
 
 interface ChatMessage {
   type: 'bot' | 'user';
@@ -29,8 +28,7 @@ export class ChatbotComponent {
   isTyping = signal(false);
   userInput = signal('');
 
-  private genAI = new GoogleGenerativeAI(firebaseConfig.apiKey);
-  private model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
 
   categories = CHAT_CATEGORIES;
   allQuestions = ELECTION_QA;
@@ -98,22 +96,8 @@ export class ChatbotComponent {
     this.userInput.set('');
     this.isTyping.set(true);
 
-    try {
-      const prompt = `You are an Indian Election Assistant. Answer the following question about the Indian election process accurately and concisely based on official ECI (Election Commission of India) rules. If the question is not about elections, politely redirect the user.
-      
-      Question: ${text}`;
-
-      const result = await this.model.generateContent(prompt);
-      const response = await result.response;
-      const aiResponse = response.text();
-      
-      this.isTyping.set(false);
-      this.addBotMessage(aiResponse);
-    } catch (error) {
-      console.error('Gemini Error:', error);
-      this.isTyping.set(false);
-      this.addBotMessage("⚠️ I'm having trouble connecting to my brain right now. Please try again or pick a question from the list!");
-    }
+    this.isTyping.set(false);
+    this.addBotMessage("⚠️ I can only answer questions from the provided list. Please select a category or pick a question from the list.");
   }
 
   onSearch(event: Event): void {
