@@ -6,7 +6,7 @@ $surface: #FFFFFF;
 $surface-dark: #0F1923;
 $surface-card: #1A2735;
 $text: #1A1A2E;
-$text-muted: #6B7280;
+$text-muted: #4B5563; // Improved contrast from #6B7280
 $text-light: #FFFFFF;
 $border: #E5E7EB;
 $shadow: rgba(0, 0, 0, 0.15);
@@ -219,7 +219,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: var(--font-family);
 
     &::placeholder {
-      color: #9CA3AF;
+      color: #71717a; // Improved contrast from #9CA3AF
     }
   }
 
@@ -397,7 +397,7 @@ $transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   .cat-count {
     font-size: 11px;
-    color: $text-muted;
+    color: #4B5563; // Using improved text-muted
     background: #F3F4F6;
     padding: 2px 8px;
     border-radius: 20px;

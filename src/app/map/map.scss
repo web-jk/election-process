@@ -6,7 +6,7 @@
   --primary-dark: #E55D00;
   --surface: #FFFFFF;
   --text: #1A1A2E;
-  --text-muted: #6B7280;
+  --text-muted: #4B5563; // Improved contrast from #6B7280
   --shadow: rgba(0, 0, 0, 0.15);
   --radius: 16px;
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -310,9 +310,9 @@
 
   p {
     margin: 0;
-    font-size: 10px;
-    color: var(--text-muted);
-    font-weight: 500;
+    font-size: 11px; // Increased from 10px
+    color: #374151; // Improved contrast for disclaimer
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }

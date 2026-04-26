@@ -1,12 +1,12 @@
-<main class="login-container">
+<main class="login-container" role="main">
   <div class="login-card">
-    <img src="logo.svg" alt="Election Process Logo" class="app-logo" width="64" height="64" style="margin: 0 auto 16px; display: block;">
+    <img src="logo.svg" alt="Election Process official logo" class="app-logo" width="64" height="64" style="margin: 0 auto 16px; display: block;">
     <h1>Election Process Info</h1>
     <p>Discover Parliamentary & Assembly constituencies across India</p>
     
     <div class="actions">
-      <button class="btn btn-google" (click)="loginWithGoogle()">
-        <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google logo" width="24" height="24">
+      <button class="btn btn-google" (click)="loginWithGoogle()" aria-label="Sign in with your Google account">
+        <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="" role="presentation" aria-hidden="true" width="24" height="24">
         Login with Google
       </button>
       <div class="divider"><span>OR</span></div>

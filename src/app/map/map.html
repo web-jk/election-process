@@ -8,16 +8,16 @@
     <div class="welcome-card" [class.hidden]="!showHelp()">
       <div class="welcome-header">
         <div class="user-profile">
-          <div class="avatar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <div class="avatar" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="presentation"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           </div>
           <div class="user-info">
             <span class="greeting">Namaste,</span>
             <span class="name">{{ userName() }}</span>
           </div>
         </div>
-        <button class="icon-btn help-toggle" (click)="toggleHelp()" title="Hide Help">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <button class="icon-btn help-toggle" (click)="toggleHelp()" title="Hide Help" aria-label="Hide help guide">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
 
@@ -27,15 +27,15 @@
         
         <div class="quick-guide">
           <div class="guide-item">
-            <span class="dot primary"></span>
+            <span class="dot primary" aria-hidden="true"></span>
             <span class="label">Click states for data</span>
           </div>
           <div class="guide-item">
-            <span class="dot info"></span>
+            <span class="dot info" aria-hidden="true"></span>
             <span class="label">Hover for details</span>
           </div>
           <div class="guide-item">
-            <span class="dot success"></span>
+            <span class="dot success" aria-hidden="true"></span>
             <span class="label">Real-time updates</span>
           </div>
         </div>
@@ -44,7 +44,7 @@
 
     <!-- Mini Toggle (When Help is hidden) -->
     <button class="mini-help-btn" [class.show]="!showHelp()" (click)="toggleHelp()" aria-label="Show help guide">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
       <span>Show Guide</span>
     </button>
   </div>

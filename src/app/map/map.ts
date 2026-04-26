@@ -17,6 +17,7 @@ export class MapComponent implements AfterViewInit, OnInit {
   
   private map: google.maps.Map | undefined;
   private infoWindow: google.maps.InfoWindow | undefined;
+  private overlays: any[] = [];
   
   // Welcome and Help state
   protected userName = signal<string>('Guest');
@@ -49,7 +50,9 @@ export class MapComponent implements AfterViewInit, OnInit {
 
       const mapOptions: google.maps.MapOptions = {
         center: { lat: 21.7679, lng: 78.8718 },
-        zoom: 5.2,
+        zoom: 5,
+        minZoom: 4,
+        maxZoom: 12,
         disableDefaultUI: true,
         zoomControl: true,
         zoomControlOptions: {
@@ -58,10 +61,16 @@ export class MapComponent implements AfterViewInit, OnInit {
         styles: [
           {
             featureType: 'all',
+            elementType: 'labels',
+            stylers: [{ visibility: 'off' }]
+          },
+          {
+            featureType: 'all',
             stylers: [{ visibility: 'off' }]
           }
         ],
-        backgroundColor: '#e0ebed'
+        backgroundColor: '#f8f9fb',
+        gestureHandling: 'greedy'
       };
 
       this.map = new Map(this.mapContainer.nativeElement, mapOptions);
@@ -77,7 +86,8 @@ export class MapComponent implements AfterViewInit, OnInit {
           fillColor: this.getColor(stateName),
           strokeColor: '#ffffff',
           strokeWeight: 0.5, // Fine white lines
-          fillOpacity: 1
+          fillOpacity: 1,
+          zIndex: 1 // Base layer
         };
       });
 
@@ -137,6 +147,21 @@ export class MapComponent implements AfterViewInit, OnInit {
 
     } catch (error) {
       console.error('Error loading Google Maps:', error);
+      // Graceful error handling for invalid API keys
+      if (this.mapContainer) {
+        this.mapContainer.nativeElement.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 20px; text-align: center; background: #f8f9fb; color: #1a1a2e; font-family: 'Outfit', sans-serif;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🗺️</div>
+            <h2 style="margin: 0 0 12px; color: #FF6B00;">Map Configuration Required</h2>
+            <p style="max-width: 400px; line-height: 1.6; color: #6B7280;">
+              The interactive map is currently unavailable because a valid Google Maps API key has not been configured.
+            </p>
+            <div style="margin-top: 24px; padding: 12px 20px; background: white; border: 1px solid #E5E7EB; border-radius: 8px; font-size: 13px; color: #374151;">
+              Please check your <code>firebase.config.ts</code> file.
+            </div>
+          </div>
+        `;
+      }
     }
   }
 
@@ -180,6 +205,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     const stateFeatures: { [key: string]: any[] } = {};
     data.features.forEach((feature: any) => {
       const stateName = feature.properties.st_nm || feature.properties.NAME_1;
+      if (!stateName || stateName === 'null') return;
       if (!stateFeatures[stateName]) stateFeatures[stateName] = [];
       stateFeatures[stateName].push(feature);
     });
@@ -190,34 +216,53 @@ export class MapComponent implements AfterViewInit, OnInit {
       const sData = this.getStateLabelData(stateName);
       const center = this.getStateCenter(stateName);
 
-      // Skip if stateName is null or empty
-      if (!stateName || stateName === 'null') return;
-
       // Prevent duplicate labels for merged UTs (Dadra, Daman, Diu)
       const labelKey = sData.displayName;
       if (addedLabels.has(labelKey) && (labelKey.includes('Dadra') || labelKey.includes('Daman'))) return;
       addedLabels.add(labelKey);
 
-      // Label marker
+      // Label marker using Custom Overlay (to avoid Marker deprecation and hide base map)
       const isOceanLabel = ['andaman', 'lakshadweep'].some(k => this.normalize(stateName).includes(k));
-      new google.maps.Marker({
-        position: center,
-        map: this.map,
-        label: {
-          text: `${sData.seats !== undefined ? sData.seats + ' ' : ''}${sData.displayName}`,
-          color: '#1a3c34',
-          fontSize: '10px',
-          fontWeight: '700',
-          className: 'map-label-text'
-        },
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 0
-        },
-        interactive: false,
-        zIndex: isOceanLabel ? 9999 : 1000,
-        title: stateName
-      } as any);
+      
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'state-label';
+      labelDiv.style.position = 'absolute';
+      labelDiv.innerHTML = `
+        <div class="label-content">
+          ${sData.seats !== undefined ? `<span class="seat-num">${sData.seats}</span>` : ''}
+          <span class="state-nm">${sData.displayName}</span>
+        </div>
+      `;
+
+      // Custom Overlay Implementation
+      const overlay = new (class extends google.maps.OverlayView {
+        constructor(private pos: google.maps.LatLngLiteral, private el: HTMLElement, private map: any, private z: number) {
+          super();
+          this.setMap(map);
+        }
+        override onAdd() {
+          this.el.style.zIndex = this.z.toString();
+          this.el.style.transform = 'translate(-50%, -50%)';
+          this.el.style.whiteSpace = 'nowrap';
+          this.getPanes()?.markerLayer.appendChild(this.el);
+        }
+        override draw() {
+          const projection = this.getProjection();
+          if (!projection) return;
+          const p = projection.fromLatLngToDivPixel(new google.maps.LatLng(this.pos));
+          if (p) {
+            this.el.style.left = p.x + 'px';
+            this.el.style.top = p.y + 'px';
+          }
+        }
+        override onRemove() {
+          if (this.el.parentElement) {
+            this.el.parentElement.removeChild(this.el);
+          }
+        }
+      })(center, labelDiv, this.map, isOceanLabel ? 9999 : 1000);
+
+      this.overlays.push(overlay);
     });
   }
 
